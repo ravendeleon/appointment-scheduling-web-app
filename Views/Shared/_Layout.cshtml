@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Scheduling App</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+            body { background-color: #f8f9fa; }
+            .navbar-brand { font-weight: bold; }
+            .main-content { padding: 2rem; }
+    </style>
+</head>
+<body>
+    @* navigation bar shown on every page *@
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Scheduling App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Customer" asp-action="Index">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Appointment" asp-action="Index">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Calendar" asp-action="Index">Calendar</a>
+                    </li>
+                    @* only show Reports link to managers *@
+                    @if (Context.Session.GetString("Role") == "manager")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Report" asp-action="Index">Reports</a>
+                        </li>
+                    }
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span class="navbar-text me-3 text-white">
+                            Logged in as: <strong>@Context.Session.GetString("Username")</strong>
+                            <span class="badge bg-light text-dark ms-1">
+                                @Context.Session.GetString("Role")
+                            </span>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content container-fluid">
+        @* show appointment alert *@
+        @if (TempData["Alert"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show mt-2" role="alert">
+                @TempData["Alert"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @* show success message *@
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @* show error message *@
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

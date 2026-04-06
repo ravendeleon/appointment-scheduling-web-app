@@ -1,0 +1,27 @@
+﻿@model SchedulingApp.Models.Customer
+
+@{
+    ViewData["Title"] = "Delete Customer";
+}
+
+<h2>Delete Customer</h2>
+<hr />
+
+<div class="alert alert-warning">
+    Are you sure you want to delete this customer?
+</div>
+
+<dl class="row" style="max-width: 400px;">
+    <dt class="col-sm-4">Name</dt>
+    <dd class="col-sm-8">@Model.CustomerName</dd>
+    <dt class="col-sm-4">City</dt>
+    <dd class="col-sm-8">@Model.City</dd>
+    <dt class="col-sm-4">Phone</dt>
+    <dd class="col-sm-8">@Model.Phone</dd>
+</dl>
+
+<form method="post" asp-action="Delete" asp-controller="Customer">
+    <input type="hidden" name="id" value="@Model.CustomerId" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>

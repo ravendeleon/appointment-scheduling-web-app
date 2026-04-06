@@ -1,0 +1,86 @@
+﻿@model List<SchedulingApp.Models.Customer>
+
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Customers</h2>
+    <a asp-action="Create" class="btn btn-primary">+ Add Customer</a>
+</div>
+
+@* real-time search box - filters the table as the user types using JavaScript *@
+<div class="mb-3">
+    <input type="text" id="customerSearch" class="form-control"
+           style="max-width: 400px;"
+           placeholder="Search by name, city, phone, or country" />
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No customers found.</div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Phone</th>
+                <th>Postal Code</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="customerBody">
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.CustomerId</td>
+                    <td>@c.CustomerName</td>
+                    <td>@c.Address</td>
+                    <td>@c.City</td>
+                    <td>@c.Country</td>
+                    <td>@c.Phone</td>
+                    <td>@c.PostalCode</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@c.CustomerId"
+                           class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@c.CustomerId"
+                           class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p class="text-muted small" id="customerCount">
+        Showing @Model.Count customer(s)
+    </p>
+}
+
+@section Scripts {
+    <script>
+        // real-time search - filters the customer table as the user types
+        document.getElementById('customerSearch').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#customerBody tr');
+            let visibleCount = 0;
+
+            rows.forEach(function (row) {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            document.getElementById('customerCount').innerText =
+                'Showing ' + visibleCount + ' customer(s)';
+        });
+    </script>
+}

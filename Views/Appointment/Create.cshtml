@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Add Appointment";
+}
+
+<h2>Add Appointment</h2>
+<hr />
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div style="max-width: 600px;">
+    <form method="post" asp-action="Create" asp-controller="Appointment">
+        <div class="mb-3">
+            <label class="form-label">Customer</label>
+            <select class="form-select" name="customerId" required>
+                <option value="">-- Select Customer --</option>
+                @foreach (SelectListItem item in ViewBag.Customers)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" name="title"
+                   value="@ViewBag.Title" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3">@ViewBag.Description</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Location</label>
+            <input type="text" class="form-control" name="location"
+                   value="@ViewBag.Location" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Contact</label>
+            <input type="text" class="form-control" name="contact"
+                   value="@ViewBag.Contact" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Type</label>
+            @* hardcoded to avoid SelectList binding issues *@
+            <select class="form-select" name="appointmentType" required>
+                <option value="">-- Select Type --</option>
+                <option value="Consultation">Consultation</option>
+                <option value="Planning">Planning</option>
+                <option value="Review">Review</option>
+                <option value="Follow-up">Follow-up</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" name="startDate"
+                   value="@ViewBag.StartDate" required />
+        </div>
+        <div class="row">
+            <div class="col mb-3">
+                <label class="form-label">Start Time</label>
+                <input type="time" class="form-control" name="startTime"
+                       value="@ViewBag.StartTime" required />
+            </div>
+            <div class="col mb-3">
+                <label class="form-label">End Time</label>
+                <input type="time" class="form-control" name="endTime"
+                       value="@ViewBag.EndTime" required />
+            </div>
+        </div>
+        <p class="text-muted small">
+            Business hours: Mon–Fri, 9:00 AM – 5:00 PM Eastern Time
+        </p>
+        <button type="submit" class="btn btn-primary">Save Appointment</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>

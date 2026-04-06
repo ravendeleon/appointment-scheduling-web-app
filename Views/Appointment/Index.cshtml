@@ -1,0 +1,86 @@
+﻿@model List<SchedulingApp.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Appointments";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Appointments</h2>
+    <a asp-action="Create" class="btn btn-primary">+ Add Appointment</a>
+</div>
+
+@* real-time search box - filters as the user types using JavaScript *@
+<div class="mb-3">
+    <input type="text" id="appointmentSearch" class="form-control"
+           style="max-width: 400px;"
+           placeholder="Search by customer, type, title, or location" />
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No appointments found.</div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="appointmentBody">
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.AppointmentId</td>
+                    <td>@a.CustomerName</td>
+                    <td>@a.Title</td>
+                    <td>@a.Type</td>
+                    <td>@a.Location</td>
+                    <td>@a.StartLocal.ToString("M/d/yyyy h:mm tt")</td>
+                    <td>@a.EndLocal.ToString("M/d/yyyy h:mm tt")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@a.AppointmentId"
+                           class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@a.AppointmentId"
+                           class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p class="text-muted small" id="appointmentCount">
+        Showing @Model.Count appointment(s)
+    </p>
+}
+
+@section Scripts {
+    <script>
+        // real-time search - filters the appointment table as the user types
+        document.getElementById('appointmentSearch').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#appointmentBody tr');
+            let visibleCount = 0;
+
+            rows.forEach(function (row) {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            document.getElementById('appointmentCount').innerText =
+                'Showing ' + visibleCount + ' appointment(s)';
+        });
+    </script>
+}
