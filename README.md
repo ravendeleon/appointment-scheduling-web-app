@@ -116,5 +116,5 @@ dotnet test
 ## 👩‍💻 Author
 
 **Raven DeLeon**  
-B.S. Software Engineering — Western Governors University  
-[GitHub](https://github.com/ravendeleon) · [LinkedIn](https://www.linkedin.com/in/ravenpdeleon/)
+Software Engineer
+[LinkedIn](https://www.linkedin.com/in/ravenpdeleon/)
